@@ -1,17 +1,17 @@
 ﻿@model IEnumerable<Movie>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Movies";
 }
 
-<h1>Index</h1>
+<h1>List Of Movies</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table" bgcolor="black">
     <thead>
-        <tr>
+        <tr bgcolor="gray">
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
@@ -29,7 +29,7 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+        <tr bgcolor="lightgray">
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
@@ -43,9 +43,9 @@
                 @Html.DisplayFor(modelItem => item.RentalPrice)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.MovieId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.MovieId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.MovieId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.MovieId" class="btn btn-outline-primary">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MovieId" class="btn btn-outline-info">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MovieId" class="btn btn-outline-warning">Delete</a>
             </td>
         </tr>
 }

@@ -133,14 +133,24 @@ namespace VideoShopRentalV3.Controllers
                 return NotFound();
             }
 
-            var rentalHeader = await _context.RentalHeaders.FindAsync(id);
+            /*var rentalHeader = await _context.RentalHeaders.FindAsync(id);
             if (rentalHeader == null)
             {
                 return NotFound();
-            }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", rentalHeader.CustomerId);
-            return View(rentalHeader);
+            }*/
+            var rental = await _context.RentalHeaders
+                        .Include(r => r.RentalDetails) // Ensure rental details are loaded
+                        .ThenInclude(d => d.Movie)     // Ensure related movies are loaded
+                        .FirstOrDefaultAsync(r => r.RentalHeaderId == id);
+            ViewBag.RentalDetails = rental.RentalDetails ?? new List<RentalDetail>();
+
+            // Ensure ViewBag.Movies is always initialized
+            ViewBag.Movies = await _context.Movies.ToListAsync();
+
+            ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", rental.CustomerId);
+            return View(rental);
         }
+       
 
         // POST: RentalHeaders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -174,6 +184,12 @@ namespace VideoShopRentalV3.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            ViewBag.Movies = _context.Movies.Select(m => new SelectListItem
+            {
+                Value = m.MovieId.ToString(),
+                Text = m.Title
+            }).ToList();
             ViewData["CustomerId"] = new SelectList(_context.Customers, "CustomerId", "CustomerId", rentalHeader.CustomerId);
             return View(rentalHeader);
         }

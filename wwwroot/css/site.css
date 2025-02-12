@@ -20,8 +20,5 @@ html {
 body {
   margin-bottom: 60px;
 }
-#header1{
-    background-color:goldenrod;
-    background-blend-mode:color-burn;
-    background-size:100vh;
-}
+
+

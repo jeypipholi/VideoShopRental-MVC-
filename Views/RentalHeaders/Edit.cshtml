@@ -29,9 +29,30 @@
                 <span asp-validation-for="ReturnDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MovieIds" class="control-label"></label>
-                <input asp-for="MovieIds" class="form-control" />
-                <span asp-validation-for="MovieIds" class="text-danger"></span>
+                <label asp-for="Movies" class="control-label"></label>
+                <input asp-for="Movies" class="form-control" />
+                <span asp-validation-for="Movies" class="text-danger"></span>
+                <div>
+                    @if (ViewBag.RentalDetails != null && ViewBag.Movies != null)
+                    {
+                        var movies = ViewBag.Movies as List<Movie>; // Explicitly cast ViewBag.Movies
+
+                        <ul>
+                            @foreach (var rental in ViewBag.RentalDetails)
+                            {
+                                var movie = movies?.FirstOrDefault(m => m.MovieId == rental.MovieId);
+                                if (movie != null)
+                                {
+                                    <li>@movie.MovieId - @movie.Title</li>
+                                }
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No movies found for this rental.</p>
+                    }
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
